@@ -131,7 +131,7 @@ def test(nsamples=10):
         if b[-1][1]!=c[-1][1]:
             diff_borda_schulze+=1
 
-    print diff_iro_borda, diff_iro_schulze, diff_borda_schulze
+    print (diff_iro_borda, diff_iro_schulze, diff_borda_schulze)
 
 def test_schulze():
     votes = []
@@ -149,6 +149,6 @@ if __name__ == '__main__':
     test()
     test_schulze()
     votes = makeup_votes(10)
-    print borda(votes,mode="exponential")
-    print iro(votes)
-    print schulze(votes)
+    print (borda(votes,mode="exponential"))
+    print (iro(votes))
+    print (schulze(votes))

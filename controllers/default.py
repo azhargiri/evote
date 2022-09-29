@@ -69,8 +69,12 @@ def start_callback():
                 ballot_counter+=1
                 ballot_uuid = 'ballot-%i-%.6i' % (election.id,ballot_counter)
                 blank_ballot_content = blank_ballot(ballot_uuid)
-                signature = 'signature-'+sign(blank_ballot_content,
-                                              election.private_key)
+
+                if not isinstance(blank_ballot_content, bytes):
+                    blank_ballot_content = bytes(blank_ballot_content, "utf8")
+
+                message = sign(blank_ballot_content, election.private_key) 
+                signature = 'signature-'+ message.decode("utf8")
                 db.ballot.insert(
                     election_id=election.id,
                     ballot_content = blank_ballot_content,
@@ -228,13 +232,13 @@ def compute_results(election):
                 if len(rankers[name])<k+1:
                     rankers[name].append([])
                 vote = rankers[name][-1]
-                print "ballot id:",ballot.id, "key:",key, "results[key]:",results[key], "vote:",vote
+                print ("ballot id:",ballot.id, "key:",key, "results[key]:",results[key], "vote:",vote)
                 ranking = int(results[key])
                 d = ranking-len(vote)
                 if d>0:
-                    print "vote before:", vote
+                    print ("vote before:", vote)
                     vote+=[0]*d
-                    print "vote after: ", vote
+                    print ("vote after: ", vote)
                 vote[ranking-1] = value
             else:
                 raise RuntimeError("Invalid Voting Scheme")    
@@ -252,7 +256,7 @@ def compute_results(election):
         for (r,k) in cschulze:
             counters[key] += ' S:%s' % r
 
-    print counters
+    print (counters)
     election.update_record(counters=counters)
 
 #@cache(request.env.path_info,time_expire=300,cache_model=cache.ram)

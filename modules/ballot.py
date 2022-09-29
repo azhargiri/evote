@@ -3,7 +3,8 @@ import re, hashlib, base64
 import rsa
 import json
 import random
-import cPickle as pickle
+# import cPickle as pickle
+import _pickle as pickle
 from uuid import uuid4
 try:
     import ast
